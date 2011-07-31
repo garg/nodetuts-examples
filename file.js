@@ -1,7 +1,8 @@
-// This buffers the entire file and then sets all of it in one go potentially causing node.js to get overwhelmed. bad! 
-
+//using createReadStream
+//
 var http = require('http');
 var fs = require('fs');
+var util = require('util');
 
 var file_path = __dirname + '/cat.gif';
 
@@ -17,10 +18,13 @@ fs.stat(file_path, function(err, stat){
 			'Content-Length': stat.size
 		});
 
-		fs.readFile(file_path, function(err, file_content) {
-      	response.write(file_content);
-      	response.end();
-    	});
+		var rs = fs.createReadStream(file_path);
+		util.pump(rs, response, function(err) {
+			if (err) {
+				throw err;
+			}
+		});
+
   	}).listen(4000)
 
 });
