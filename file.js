@@ -1,3 +1,5 @@
+// This buffers the entire file and then sets all of it in one go potentially causing node.js to get overwhelmed. bad! 
+
 var http = require('http');
 var fs = require('fs');
 
