@@ -1,18 +1,27 @@
 var http = require('http');
 var fs = require('fs');
 
-var file_path = __dirname + '/cat.jpg';
+var file_path = __dirname + '/cat.gif';
+
 fs.stat(file_path, function(err, stat){
-  stat.size
-});
-http.createServer(function(request, response) {
+	
+	if (err) {
+		throw err;
+	}
+	http.createServer(function(request, response) {
   
-  response.writeHead(200, {
-    'Content-Type': 'image/jpeg',
-    'Content-Length':
-  }
+		response.writeHead(200, {
+			'Content-Type': 'image/gif',
+			'Content-Length': stat.size
+		});
 
+		fs.readFile(file_path, function(err, file_content) {
+      	response.write(file_content);
+      	response.end();
+    	});
+  	}).listen(4000)
 
-}).listen(4000)
+});
+
 
 
